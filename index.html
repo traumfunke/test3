@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zufallsgenerator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: #F6D476;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      text-align: center;
+      color: #222;
+    }
+
+    header {
+      padding: 30px 0 10px;
+    }
+
+    header img {
+      border: none; /* Bild ohne Umrandung */
+      width: 300px; /* Breite auf 300px gesetzt */
+      height: auto; /* Höhe passt sich der Breite an */
+      object-fit: cover; /* Bild bleibt unverzerrt */
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin: 25px 0 15px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      width: 90%;
+      max-width: 600px;
+      margin-top: 20px; /* Verringert den Abstand zwischen der Überschrift und den Themen */
+    }
+
+    #display {
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      font-size: 1.6rem;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 80%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    button {
+      margin-top: 30px;
+      padding: 20px 45px;
+      font-size: 1.5rem;
+      font-weight: bold;
+      border: none;
+      border-radius: 999px;
+      background-color: #333;
+      color: white;
+      cursor: pointer;
+      font-family: inherit;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #111;
+    }
+
+    #retryButton {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 10px 25px;
+      font-size: 1.1rem;
+      opacity: 0.85;
+      display: none;
+    }
+
+    @media (max-width: 500px) {
+      main {
+        margin-top: 8vh;
+      }
+
+      #display {
+        font-size: 1.3rem;
+        padding: 25px;
+      }
+
+      button {
+        font-size: 1.4rem;
+        padding: 18px 40px;
+      }
+
+      #retryButton {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://github.com/traumfunke/test3/blob/main/Cheers%20to%20Us.png?raw=true" alt="Mein Bild" />
+  </header>
+
+  <h1>Humor & Quatsch</h1>
+
+  <main>
+    <div id="display"></div>
+    <button id="startButton" onclick="startRoll()">Start</button>
+  </main>
+
+  <button id="retryButton" onclick="restart()">Nochmal</button>
+
+  <script>
+    const begriffe = [
+      "Was ist der dümmste Insider, den nur wir verstehen?",
+      "Wer von uns würde bei einem Lachanfall zuerst weinen?",
+      "Was war unser peinlichster gemeinsamer Lachmoment?",
+      "Welche Rolle würdest du in einer Comedyserie spielen?",
+      "Was ist dein Lieblings-Wortspiel, das du mit mir teilst?",
+      "Welcher TikTok-/Reel-Trend würde perfekt zu uns passen?",
+      "Wer von uns würde eher eine Banane anrufen, wenn das Handy weg ist?",
+      "Was ist dein liebster Quatsch-Spitzname für mich?",
+      "Wenn wir ein albernes Hobby hätten – was wäre es?",
+      "Wer macht die besseren Tiergeräusche?",
+      "Was ist das Lustigste, das du je im Halbschlaf gesagt hast?",
+      "Wer würde eher aus Versehen ein Meme von sich selbst posten?",
+      "Welcher unserer gemeinsamen Witze ist völlig sinnlos – aber wir feiern ihn?",
+      "Wer hat den seltsameren Humor von uns beiden?",
+      "Was wäre dein Comedy-Programmtitel über unsere Beziehung?",
+      "Welche erfundene Sprache könnten wir gemeinsam sprechen?",
+      "Welches Lied singen wir heimlich falsch – aber mit voller Leidenschaft?",
+      "Was ist dein Lieblings-Fail von mir? (Lieb gemeint!)",
+      "Wer macht die besseren dummen Tanzmoves im Wohnzimmer?",
+      "Was wäre unser Signature-Tanz auf einer Hochzeit?",
+      "Welches Cartoon-Duo passt perfekt zu uns?",
+      "Wenn wir in einer Slapstick-Szene wären – was würde passieren?",
+      "Wer würde beim Karaoke komplett eskalieren?",
+      "Was war unser letzter Lachflash und warum?",
+      "Was ist das albernste Geschenk, das du mir machen würdest?",
+      "Wenn wir ein Quatschspiel erfinden müssten – wie würde es heißen?",
+      "Welche Essenskombi findest du absurd – und ich liebe sie?",
+      "Wer hat öfter einen peinlichen Ohrwurm?",
+      "Welche absurde Theorie könnten wir aufstellen und hart verteidigen?",
+      "Was war der verrückteste Spitzname, den wir je verwendet haben?",
+      "Was ist deine Spezialität im „So-tun-als-ob“-Schauspiel?",
+      "Was ist dein go-to Witz, wenn ich schlecht gelaunt bin?",
+      "Wer würde eher im Supermarkt laut singen – und warum ist es okay?",
+      "Was war unser bester „Das darf niemand gesehen haben“-Moment?",
+      "Wer ist besser darin, Dinge mit falscher Ernsthaftigkeit zu erzählen?",
+      "Welche absurde Herausforderung würdest du mir spontan stellen?",
+      "Wer würde eher ein Kostüm tragen – ohne Anlass?",
+      "Was war das Albernste, was du jemals für mich gemacht hast?",
+      "Wie sieht unser gemeinsamer „Cringe-aber-süß“-Moment aus?",
+      "Was wäre unser gemeinsamer Comedy-Film-Titel?"
+    ];
+
+    let interval;
+
+    function startRoll() {
+      const display = document.getElementById("display");
+      const startButton = document.getElementById("startButton");
+      const retryButton = document.getElementById("retryButton");
+      
+      startButton.style.display = "none"; // Hide the start button
+      display.style.display = "block"; // Show the display div
+
+      let index = 0;
+
+      interval = setInterval(() => {
+        display.textContent = begriffe[index];
+        index = (index + 1) % begriffe.length;
+      }, 150);
+
+      setTimeout(() => {
+        clearInterval(interval);
+        display.textContent = begriffe[Math.floor(Math.random() * begriffe.length)];
+        retryButton.style.display = "inline-block";
+      }, 3000);
+    }
+
+    function restart() {
+      const display = document.getElementById("display");
+      const retryButton = document.getElementById("retryButton");
+      const startButton = document.getElementById("startButton");
+
+      retryButton.style.display = "none";
+      display.style.display = "none";
+      startButton.style.display = "inline-block";
+    }
+  </script>
+</body>
+</html>
